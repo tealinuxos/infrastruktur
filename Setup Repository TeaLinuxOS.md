@@ -2,7 +2,7 @@
 
 ### Mengapa repositori lokal penting?
 
-Sebagai sistem administrator biasanya sering menginstal aplikasi, update keamanan dan perbaikan perangkat lunak di semua sistem. Tentunya, akan mengkonsumsi lebih banyak quota internet. Jadi, alih - alih mendownload dan menginstal aplikasi setiap saat di semua sistem dari repositori global Ubuntu, sebaiknya simpan semua aplikasi di server lokal dan distribusikan ke sistem Ubuntu lainnya bila diperlukan. Memiliki repositori lokal akan sangat cepat dan efisien, karena semua aplikasi yang dibutuhkan akan ditransfer melalui jaringan lokal. Sehingga menghemat quota internet dan pada akhirnya akan mengurangi biaya internet tahunan.
+Sebagai sistem administrator biasanya sering menginstal aplikasi, update keamanan dan perbaikan perangkat lunak di semua sistem. Tentunya, akan mengkonsumsi lebih banyak quota internet. Jadi, alih - alih menguduh dan menginstal aplikasi setiap saat di semua sistem dari repositori global Ubuntu, sebaiknya simpan semua aplikasi di server lokal dan distribusikan ke sistem Ubuntu lainnya bila diperlukan. Memiliki repositori lokal akan sangat cepat dan efisien, karena semua aplikasi yang dibutuhkan akan ditransfer melalui jaringan lokal. Sehingga menghemat quota internet dan pada akhirnya akan mengurangi biaya internet tahunan.
 
 Dalam artikel ini, saya akan menunjukkan cara menata repositori lokal di server Ubuntu dengan dua metode.
 
@@ -16,7 +16,7 @@ Yang dibutuhkan adalah ruang hard drive yang cukup dan koneksi internet yang cep
 ### Metode 1 : apt-mirror
 
 Dalam metode ini, server lokal akan menarik semua paket dari repositori global (server Ubuntu) dan menyimpannya di hard-drive server lokal.
-Pertama instal Apache pada server lokal, web server Apache penting untuk berbagi paket melalui jaringan.
+Pertama instal Apache HTTP Server pada server lokal, Apache HTTP Server penting untuk berbagi paket melalui jaringan publik.
 
 ```shell
 sudo apt-get install apache2
@@ -41,6 +41,7 @@ sudo vim /etc/apt/mirror.list
 ```
 
 Uncomment dan edit pada baris `set base_path` dan tambah `/myrepo`
+
 Uncomment dan edit pada baris `set nthreads` dan tambah `20`
 
 ```shell
@@ -96,11 +97,12 @@ clean http://archive.ubuntu.com/ubuntu
 
 Pada file konfigurasi di atas, dapat menambahkan daftar sumber repositori global Ubuntu tergantung pada distribusi yang digunakan.
 
-Jika menggunakan arsitektur 32bit dan 64bit, harus memberi nama secara terpisah pada isi file konfigurasi. Misalnya, jika menggunakan arsitektur 32bit harus dimulai dengan `deb-i386` dan jika menggunakan arsitektur 64bit harus dimulai dengan `deb-amd64`. Setelah selesai simpan file konfigurasi dan jalankan perintah berikut:
+Jika menggunakan arsitektur 32bit dan 64bit, harus memberi nama secara terpisah pada isi file konfigurasi. Misalnya, jika menggunakan arsitektur 32bit harus dimulai dengan `deb-i386` dan jika menggunakan arsitektur 64bit harus dimulai dengan `deb-amd64`. Setelah selesai simpan file konfigurasi dan jalankan perintah berikut.
 
 ```shell
 sudo apt-mirror
 ```
+
 Sample output:
 
 ```shell
@@ -111,15 +113,30 @@ Sekarang paket dari repositori global Ubuntu sudah disimpan ke direktori lokal `
 Sistem administrator tidak perlu menjalankan perintah `sudo apt-mirror` setiap hari untuk mendapatkan update repositori / update perangkat lunak terbaru, cukup menjadwalkan proses ini dengan menggunakan cron. Jadi server lokal akan secara otomatis menjalankan perintah `apt-mirror` setiap hari dan akan terus memperbarui repositori.
 
 Buka file `/etc/cron.d/apt-mirror`
+
 ```shell
 sudo vim /etc/cron.d/apt-mirror
 ```
+
 Edit dan tambahkan konfigurasi file `/etc/cron.d/apt-mirror`
+
 ```shell
 #
 # Regular cron jobs for the apt-mirror package
 #
-0 4 * * *  apt-mirror  /usr/bin/apt-mirror > /var/spool/apt-mirror/var/cron.log
+0 4 * * *  apt-mirror  /usr/bin/apt-mirror > /var/log/apt-mirror/cron.log
 ```
+
+Sesuai dengan file konfigurasi cron di atas, cron akan berjalan setiap hari jam `04:00` pagi(a.m) dan secara automatis menguduh dan memperbarui paketnya. Seperti yang sudah dijelaskan sebelumnya, semua paket akan diuduh dan disimpan pada direktori `/myrepo` di server lokal.
+
+Setelah selesai, isi dari direktori `/myrepo` harus tersedia melalui HTTP (web) untuk diakses klien. Untuk melakukan itu cukup buat `symbolic links` ke `DocumentRoot` Apache HTTP Server.
+
+```shell
+cd /myrepo/
+sudo ln -s /myrepo/mirror/archive.ubuntu.com/ubuntu/ /var/www/html/ubuntu
+```
+
+### Metode 2 : apt-cacher
+
 
 Sekian Dokumentasi :D
