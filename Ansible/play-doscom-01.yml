@@ -1,0 +1,56 @@
+- name: Install CWP (CentOS Web Panel)
+  hosts: node_pinguin
+  become: true
+  become_method: su
+  become_user: doscom
+
+  tasks:
+  - name: Add repository epel
+    yum_repository:
+      name: epel
+      description: EPEL YUM repo
+      baseurl: https://epel.mirror.angkasa.id/pub/epel/7/x86_64/e/epel-release-7-9.noarch.rpm
+
+  - name: yum-clean-metadata
+    command: yum clean metadata
+    args:
+      warn: no
+
+  - name: Update repo
+    yum:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: Install paket wget latest version
+    yum:
+      name: wget
+      state: latest
+
+  - name: Install paket vim latest version
+    yum:
+      name: vim
+      state: latest
+
+  - name: Install paket nano latest version
+    yum:
+      name: nano
+      state: latest
+
+  - name: Install paket git latest version
+    yum:
+      name: git
+      state: latest
+
+  - name: download CWP (CentOS Web Panel)
+    get_url:
+      url: http://centos-webpanel.com/cwp-latest
+      dest: /usr/local/src/cwp-latest
+
+  - name: Change directory to /usr/local/src/ and execute bash
+    shell: sh cwp-latest >> CWP.log
+    args:
+      chdir: /usr/local/src/
+      creates: CWP.log
+
+  - name: Restart server
+    shell: reboot
