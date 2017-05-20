@@ -1,0 +1,15 @@
+[node_pinguin]
+pinguin.dinus.ac.id
+
+[node_studio]
+studio.tealinuxos.org
+
+[node_pinguin:vars]
+ansible_user=$U_PINGUIN
+ansible_port=$P_PINGUIN
+ansible_ssh_pass=$PASS_PINGUIN
+
+[node_studio:vars]
+ansible_user=$U_STUDIO
+ansible_port=$P_STUDIO
+ansible_ssh_pass=$PASS_STUDIO
