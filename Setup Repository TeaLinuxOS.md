@@ -177,7 +177,7 @@ sudo apt-get install apt-cacher
 
 Lalu akan muncul **text box** pilih `daemon` dan klik Ok
 
-![alt tag](https://github.com/tealinuxos/infrastruktur/images/image001.png)
+![alt tag](https://github.com/tealinuxos/infrastruktur/blob/master/images/image001.jpg)
 
 Setelah itu buka file konfigurasi `/etc/default/apt-cacher` dan edit.
 
