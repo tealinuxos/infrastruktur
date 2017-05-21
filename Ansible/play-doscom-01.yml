@@ -1,8 +1,8 @@
 - name: Install CWP (CentOS Web Panel)
   hosts: node_pinguin
-  become: true
+  become: yes
   become_method: su
-  become_user: doscom
+  become_user: dscm
 
   tasks:
   - name: Add repository epel
