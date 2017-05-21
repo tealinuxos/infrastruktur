@@ -1,10 +1,10 @@
-# Setup Repositori Lokal Di Ubuntu
+# Setup Repositori Lokal di Ubuntu
 
 ### Mengapa repositori lokal penting?
 
 Sebagai sistem administrator biasanya sering menginstal aplikasi, update keamanan dan perbaikan perangkat lunak di semua sistem. Tentunya, akan mengkonsumsi lebih banyak quota internet. Jadi, alih - alih menguduh dan menginstal aplikasi setiap saat di semua sistem dari repositori global Ubuntu, sebaiknya simpan semua aplikasi di server lokal dan distribusikan ke sistem Ubuntu lainnya bila diperlukan. Memiliki repositori lokal akan sangat cepat dan efisien, karena semua aplikasi yang dibutuhkan akan ditransfer melalui jaringan lokal. Sehingga menghemat quota internet dan pada akhirnya akan mengurangi biaya internet tahunan.
 
-Dalam artikel ini, saya akan menunjukkan cara menata repositori lokal di server Ubuntu dengan dua metode.
+Dalam artikel ini, saya akan menunjukkan cara menata repositori lokal di server Ubuntu dengan dua metode:
 
 1. apt-mirror
 2. apt-cacher
@@ -101,7 +101,8 @@ Pada file konfigurasi di atas, dapat menambahkan daftar sumber repositori global
 Jika menggunakan arsitektur 32bit dan 64bit, harus memberi nama secara terpisah pada isi file konfigurasi. Misalnya, jika menggunakan arsitektur 32bit harus dimulai dengan `deb-i386` dan jika menggunakan arsitektur 64bit harus dimulai dengan `deb-amd64`. Setelah selesai simpan file konfigurasi dan jalankan perintah berikut.
 
 ```shell
-sudo apt-mirror
+sudo apt-mirror > /var/log/mirror.log
+sudo tail -f /var/log/mirror.log
 ```
 
 Sample output:
@@ -145,7 +146,7 @@ Edit dan tambahkan konfigurasi file `/etc/cron.d/apt-mirror`
 #
 # Regular cron jobs for the apt-mirror package
 #
-0 4 * * *  apt-mirror > /var/log/apt-mirror/cron.log
+0 4 * * *  apt-mirror > /var/log/mirror.log
 ```
 
 Sesuai dengan file konfigurasi cron di atas, cron akan berjalan setiap hari jam `04:00` pagi(a.m) dan secara automatis menguduh dan memperbarui paketnya. Seperti yang sudah dijelaskan sebelumnya, semua paket akan diuduh dan disimpan pada direktori `/myrepo` di server lokal.
