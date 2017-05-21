@@ -1,0 +1,41 @@
+- name: LAMP stack Ubuntu
+  hosts: node_studio
+  become: yes
+  become_method: sudo
+  become_user: doscom
+
+  tasks:
+  - name: clean
+    command: apt-get clean
+    become: yes
+
+  - name: Update repo
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: Setup web server & php
+    apt:
+      name: {{ item }}
+      state: latest
+    with_items:
+     - apache2
+     - git
+     - php
+     - php-mysql
+     - php-fpm
+     - php-mbstring
+    notify: Restart apache2
+
+  - name: Setup DB
+    apt:
+      name: mysql-server
+      state: latest
+    notify: Restart mysql
+
+  handlers:
+  - name: Restart apache2
+    service: name=apache2 enabled=yes state=restarted
+
+  - name: Restart mysql
+    service: name=mysql enabled=yes state=restarted
