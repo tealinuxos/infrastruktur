@@ -41,9 +41,9 @@ Setelah itu buka file konfigurasi `/etc/apt/mirror.list` dan edit.
 sudo vim /etc/apt/mirror.list
 ```
 
-Uncomment dan edit pada baris `set base_path` dan tambah `/myrepo`
+Uncomment dan edit pada baris `set base_path` dan tambah `/myrepo`.
 
-Uncomment dan edit pada baris `set nthreads` dan ganti value menjadi `20`
+Uncomment dan edit pada baris `set nthreads` dan ganti value menjadi `20`.
 
 ```shell
 ############# config ##################
@@ -134,13 +134,13 @@ Sekarang paket dari repositori global Ubuntu sudah disimpan ke direktori lokal `
 
 Sistem administrator tidak perlu menjalankan perintah `sudo apt-mirror` setiap hari untuk mendapatkan update repositori / update perangkat lunak terbaru, cukup menjadwalkan proses ini dengan menggunakan cron. Jadi server lokal akan secara otomatis menjalankan perintah `apt-mirror` setiap hari dan akan terus memperbarui repositori.
 
-Buka file `/etc/cron.d/apt-mirror`
+Buka file `/etc/cron.d/apt-mirror`.
 
 ```shell
 sudo vim /etc/cron.d/apt-mirror
 ```
 
-Edit dan tambahkan konfigurasi file `/etc/cron.d/apt-mirror`
+Edit dan tambahkan konfigurasi file `/etc/cron.d/apt-mirror`.
 
 ```shell
 #
@@ -157,6 +157,8 @@ Setelah selesai, isi dari direktori `/myrepo` harus tersedia melalui HTTP (web) 
 cd /myrepo/
 sudo ln -s /myrepo/mirror/archive.ubuntu.com/ubuntu/ /var/www/html/ubuntu
 ```
+
+---
 
 ### Metode 2 : apt-cacher
 
@@ -176,7 +178,7 @@ Lajut untuk install apt-cacher dengan perintah.
 sudo apt-get install apt-cacher
 ```
 
-Lalu akan muncul **text box** pilih `daemon` dan klik Ok
+Lalu akan muncul **text box** pilih `daemon` dan klik Ok.
 
 ![alt tag](https://github.com/tealinuxos/infrastruktur/blob/master/images/image001.jpg)
 
@@ -186,7 +188,7 @@ Setelah itu buka file konfigurasi `/etc/default/apt-cacher` dan edit.
 sudo vim /etc/default/apt-cacher
 ```
 
-Uncomment dan edit pada baris `AUTOSTART=` dan ganti value dari `0` ke `1`
+Uncomment dan edit pada baris `AUTOSTART=` dan ganti value dari `0` ke `1`.
 
 ```shell
 # apt-cacher daemon startup configuration file
@@ -209,7 +211,7 @@ Buka file konfigurasi `/etc/apt-cacher/apt-cacher.conf` dan edit.
 sudo vim /etc/apt-cacher/apt-cacher.conf
 ```
 
-Uncomment dan ganti value dari baris `allowed_hosts` atau `denied_hosts` sesuai dengan IP (Internet Protocol) yang dipakai host, contoh IP yang dapat izin untuk mengakses 192.168.1.10 s/d 192.168.1.20 dan yang di tolak untuk mengakses 192.168.1.2 s/d 192.168.1.8
+Uncomment dan ganti value dari baris `allowed_hosts` atau `denied_hosts` sesuai dengan IP (Internet Protocol) yang dipakai host, contoh IP yang dapat izin untuk mengakses 192.168.1.10 s/d 192.168.1.20 dan yang di tolak untuk mengakses 192.168.1.2 s/d 192.168.1.8.
 
 ```shell
 [...]
@@ -220,7 +222,7 @@ denied_hosts = 192.168.1.2 - 192.168.1.8
 [...]
 ```
 
-Simpan file konfigurasi, dan restart layanan Apache HTTP Server
+Simpan file konfigurasi, dan restart layanan Apache HTTP Server.
 
 ```shell
 sudo systemctl restart apache2.service
@@ -235,3 +237,5 @@ sudo service apache2 status
 ```
 
 Sekian Dokumentasi :D
+
+Semoga berhasil!
