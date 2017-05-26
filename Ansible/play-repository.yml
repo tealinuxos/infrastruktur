@@ -1,0 +1,44 @@
+- name: Build Repository
+  hosts: node_studio
+  become: yes
+  become_method: sudo
+  become_user: doscom
+
+  tasks:
+  - name: clean
+    command: apt-get clean
+    become: yes
+
+  - name: Update repo
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+  - name: Install apache2 & git
+    apt:
+      name: {{ item }}
+      state: latest
+    with_items:
+     - apache2
+     - git
+    notify: Restart apache2
+
+  - name: Install apt-mirror
+    apt:
+      name: apt-mirror
+      state: latest
+
+  - name: Copy file konfigurasi
+    copy:
+      src: mirror.list
+      dest: /etc/apt/mirror.list
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: apt-mirror
+    command: apt-mirror > /var/log/mirror.log
+
+  handlers:
+  - name: Restart apache2
+    service: name=apache2 enabled=yes state=restarted
