@@ -67,7 +67,7 @@ perl csftest.pl
 
 Jika output verifikasi seperti di bawah ini, CSF bekerja tanpa masalah di server
 
-![alt tag](https://github.com/tealinuxos/infrastruktur/blob/master/images/image002.jpg)
+![alt tag](https://github.com/tealinuxos/infrastruktur/blob/master/images/image002.png)
 
 Sekian Dokumentasi :D
 
