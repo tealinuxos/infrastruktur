@@ -241,6 +241,139 @@ Setelah selesai mengedit beberapa file konfigurasi CSF, simpan dan restart CSF
 csf -ra
 ```
 
+# Cara Menggunakan CSF
+
+1. Start firewall (memulai rule dari firewall)
+
+    ```shell
+    csf -s
+    ```
+
+2. Flush/Stop firewall (menghentikan rule dari firewall)
+
+    ```shell
+    csf -f
+    ```
+
+3. Restart firewall (me-restart rule dari firewall)
+
+    ```shell
+    csf -r
+    ```
+
+4. Status firewall (melihat hasil rule dari firewall)
+
+    ```shell
+    csf -l
+    ```
+
+5. Menambahkan IP ke `csf.allow` dan `rule akses`
+
+    ```shell
+    csf -a 192.168.1.109
+    ```
+
+    Output:
+
+    ```shell
+    Adding 192.168.1.109 to csf.allow and iptables ACCEPT...
+    ACCEPT  all opt -- in !lo out *  192.168.1.109  -> 0.0.0.0/0
+    ACCEPT  all opt -- in * out !lo  0.0.0.0/0  -> 192.168.1.109
+    ```
+
+6. Menghapus IP dari `csf.allow` dan `rule akses`
+
+    ```shell
+    csf -ar 192.168.1.109
+    ```
+
+    Output:
+
+    ```shell
+    Removing rule...
+    ACCEPT  all opt -- in !lo out *  192.168.1.109  -> 0.0.0.0/0
+    ACCEPT  all opt -- in * out !lo  0.0.0.0/0  -> 192.168.1.109
+    ```
+
+7. Menambahkan IP ke `csf.deny` dan `rule block`
+
+    ```shell
+    csf -d 192.168.1.109
+    ```
+
+    Output:
+
+    ```shell
+    Adding 192.168.1.109 to csf.deny and iptables DROP...
+    DROP  all opt -- in !lo out *  192.168.1.109  -> 0.0.0.0/0
+    LOGDROPOUT  all opt -- in * out !lo  0.0.0.0/0  -> 192.168.1.109
+    ```
+
+8. Menghapus IP ke `csf.deny` dan `rule block`
+
+    ```shell
+    csf -dr 192.168.1.109
+    ```
+
+    Output:
+
+    ```shell
+    Removing rule...
+    DROP  all opt -- in !lo out *  192.168.1.109  -> 0.0.0.0/0
+    LOGDROPOUT  all opt -- in * out !lo  0.0.0.0/0  -> 192.168.1.109
+    ```
+
+9. Menghapus semua record / data dari `csf.deny`.
+
+    ```shell
+    csf -df
+    ```
+
+    Output:
+
+    ```shell
+    DROP  all opt -- in !lo out *  192.168.1.110  -> 0.0.0.0/0
+    LOGDROPOUT  all opt -- in * out !lo  0.0.0.0/0  -> 192.168.1.110
+    DROP  all opt -- in !lo out *  192.168.1.111  -> 0.0.0.0/0
+    LOGDROPOUT  all opt -- in * out !lo  0.0.0.0/0  -> 192.168.1.111   
+    csf: all entries removed from csf.deny
+    ```
+
+10. Untuk mencari pola yang sesuai dengan IPtables, contoh: IP, CIDR, Port
+
+    ```shell
+    csf -g 192.168.1.110
+    ```
+
+11. Disable firewall (menonaktifkan rule dari firewall)
+
+    ```shell
+    csf -x
+    ```
+
+12. Enable firewall (mengaktifkan rule dari firewall)
+
+    ```shell
+    csf -e
+    ```
+
+13. Check update firewall
+
+    ```shell
+    csf -c
+    ```
+14. Update firewall (mendownload paket dan fitur baru firewall)
+
+    ```shell
+    csf -u
+    ```
+
+# CSF GUI
+
+![alt tag](https://github.com/tealinuxos/infrastruktur/blob/master/images/image003.png)
+
+![alt tag](https://github.com/tealinuxos/infrastruktur/blob/master/images/image004.png)
+
 Jika menginginkan lebih banyak tweak firewall CSF, baca opsi / komentar / dokumentasi  di dalam file konfigurasi `/etc/csf/csf.conf` atau di [Dokumentasi CSF](https://download.configserver.com/csf/readme.txt "ConfigServer Security & Firewall (csf)").
 
 Sekian Dokumentasi :D
