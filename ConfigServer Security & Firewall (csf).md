@@ -1,4 +1,4 @@
-# Setup ConfigServer Security and Firewall (CSF) on CentOS 7
+# Setup ConfigServer Security & Firewall (CSF) di CentOS 7
 
 ConfigServer Security & Firewall (CSF) adalah Stateful Packet Inspection (SPI) firewall, deteksi gangguan, dan aplikasi keamanan untuk server Linux. CSF adalah rangkaian keamanan yang sangat poluler dan keren.
 
@@ -35,7 +35,7 @@ systemctl start iptables.service && systemctl enable iptables.service
 systemctl start ip6tables.service && systemctl enable ip6tables.service
 ```
 
-### Step 3 - ConfigServer Security and Firewall (CSF)
+### Step 3 - ConfigServer Security & Firewall (CSF)
 
 Install CSF dependensi
 
