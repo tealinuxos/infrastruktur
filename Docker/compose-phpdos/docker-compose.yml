@@ -1,0 +1,91 @@
+#
+#                    ##        .
+#              ## ## ##       ==
+#           ## ## ## ##      ===
+#       /""""""""""""""""\___/ ===
+#  ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
+#       \______ o          __/
+#         \    \        __/
+#          \____\______/
+#
+#          |          |
+#       __ |  __   __ | _  __   _
+#      /  \| /  \ /   |/  / _\ |
+#      \__/| \__/ \__ |\_ \__  |
+#
+
+version: "3"
+
+networks:
+  ulala: #nama alias, untuk internal network docker-compose
+    external:
+      name: testnet #salah satu network docker, dengan driver bridge
+
+volumes:
+  dbdata:
+    driver: local
+
+services:
+# Application Container
+  webapps:
+    build:
+      context: ./
+      dockerfile: doscom-webapps.dockerfile
+    container_name: webapps
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    #links:
+      #- SERVICE:ALIAS
+    #external_links:
+      #- CONTAINER:ALIAS
+    networks:
+      - ulala
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+
+# Web Server Container
+  webserver:
+    build:
+      context: ./
+      dockerfile: doscom-webserver.dockerfile
+    container_name: webserver
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    ports:
+      - "8080:80"
+    networks:
+      - ulala
+
+# Database Container
+  database:
+    image: mysql:5.7
+    container_name: database
+    volumes:
+      - dbdata:/var/lib/mysql
+    ports:
+      - "13306:3306"
+    networks:
+      - ulala
+    environment:
+      - "MYSQL_DATABASE=homestead"
+      - "MYSQL_USER=homestead"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_ROOT_PASSWORD=secret"
+
+# Dashboard DB Container
+  dashboard: 
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin2
+    ports:
+      - "18080:80"
+    networks:
+      - ulala
+    links:
+      - database:database
+    #external_links:
+      #- CONTAINER:ALIAS
+    environment:
+      - "PMA_HOST=database"
