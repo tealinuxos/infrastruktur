@@ -4,3 +4,6 @@
 [submodule "Docker/repo-centos"]
 	path = Docker/repo-centos
 	url = https://github.com/setyadhiputrad/repo-centos.git
+[submodule "Docker/repo-ubuntu"]
+	path = Docker/repo-ubuntu
+	url = https://github.com/setyadhiputrad/repo-ubuntu.git
