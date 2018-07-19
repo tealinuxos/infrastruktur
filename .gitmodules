@@ -1,3 +1,6 @@
 [submodule "Docker/compose-php"]
 	path = Docker/compose-php
 	url = https://github.com/setyadhiputrad/compose-php.git
+[submodule "Docker/repo-centos"]
+	path = Docker/repo-centos
+	url = https://github.com/setyadhiputrad/repo-centos.git
