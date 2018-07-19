@@ -1,0 +1,3 @@
+[submodule "Docker/compose-php"]
+	path = Docker/compose-php
+	url = https://github.com/setyadhiputrad/compose-php.git
