@@ -7,3 +7,6 @@
 [submodule "Docker/repo-ubuntu"]
 	path = Docker/repo-ubuntu
 	url = https://github.com/setyadhiputrad/repo-ubuntu.git
+[submodule "Docker/laravel-5.6-docker-compose"]
+	path = Docker/laravel-5.6-docker-compose
+	url = https://github.com/abas/laravel-5.6-docker-compose.git
