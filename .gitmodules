@@ -10,3 +10,6 @@
 [submodule "Docker/laravel-5.6-docker-compose"]
 	path = Docker/laravel-5.6-docker-compose
 	url = https://github.com/abas/laravel-5.6-docker-compose.git
+[submodule "mini-ansible-lab"]
+	path = mini-ansible-lab
+	url = https://github.com/kahidna/mini-ansible-lab.git
