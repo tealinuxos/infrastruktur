@@ -1,0 +1,36 @@
+
+#                    ##        .
+#              ## ## ##       ==
+#           ## ## ## ##      ===
+#       /""""""""""""""""\___/ ===
+#  ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~
+#       \______ o          __/
+#         \    \        __/
+#          \____\______/
+#
+#          |          |
+#       __ |  __   __ | _  __   _
+#      /  \| /  \ /   |/  / _\ |
+#      \__/| \__/ \__ |\_ \__  |
+#
+
+version: "3"
+
+networks:
+  doscom:
+    external:
+      name: pinguin
+
+volumes:
+  dbdata:
+    driver: local
+
+services:
+  #doscom.org Applications
+  doscom_apps:
+  #pinguin.dinus.ac.id Applications
+  pinguin_apps:
+  #Portainer dashboard Applications
+  dashboard_apps:
+  #Load Balancer
+  pinguin_lb:
