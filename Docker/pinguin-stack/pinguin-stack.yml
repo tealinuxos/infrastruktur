@@ -1,5 +1,5 @@
-
-#                    ##        .
+#                    ##
+#                 ## ##        .
 #              ## ## ##       ==
 #           ## ## ## ##      ===
 #       /""""""""""""""""\___/ ===
@@ -19,18 +19,58 @@ version: "3"
 networks:
   doscom:
     external:
-      name: pinguin
-
-volumes:
-  dbdata:
-    driver: local
+      name: ${NETWORK_DOCKER}
 
 services:
   #doscom.org Applications
   doscom_apps:
+    restart: always
+    context: ./
+      dockerfile: doscom_apps.dockerfile
+    container_name: doscom_apps
+    volumes:
+      - ${VOLUME_DOSCOM}:/usr/local/apache2/htdocs
+    networks:
+      - doscom
+    
   #pinguin.dinus.ac.id Applications
   pinguin_apps:
+    restart: always
+    context: ./
+      dockerfile: pinguin_apps.dockerfile
+    container_name: pinguin_apps
+    volumes:
+      - ${VOLUME_PINGUIN}:/usr/local/apache2/htdocs
+      - ${VOLUME_ISO}:/home/DATA/iso
+    networks:
+      - doscom
+
   #Portainer dashboard Applications
   dashboard_apps:
+  restart: always
+    context: ./
+      dockerfile: dashboard_apps.dockerfile
+    container_name: dashboard_apps
+    volumes:
+      - ${VOLUME_DOSCOM}:/data portainer/portainer
+      - ${VOLUME_DASHBOARD_SOCKET}:/var/run/docker.sock
+    networks:
+      - doscom
+
   #Load Balancer
   pinguin_lb:
+  restart: always
+    context: ./
+      dockerfile: pinguin_lb.dockerfile
+    container_name: pinguin_lb
+    volumes:
+      - ${VOLUME_LB}:
+      - ${CONF_LB}:
+    links:
+      - doscom_apps:doscom_apps
+      - pinguin_apps:pinguin_apps
+      - dashboard_apps:dashboard_apps
+    #external_links:
+      #- CONTAINER:ALIAS
+    networks:
+      - doscom
