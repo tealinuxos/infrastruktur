@@ -93,6 +93,8 @@ services:
       #- SERVICE
     networks:
       - doscom
+    ports:
+      - "80:80"
     healthcheck:
       test: curl --fail http://localhost/ || exit 1
       interval: $HEALTH_INTERVAL
