@@ -32,6 +32,12 @@ services:
       - ${VOLUME_DOSCOM}:/usr/local/apache2/htdocs
     networks:
       - doscom
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: $HEALTH_INTERVAL
+      timeout: $HEALTH_TIMEOUT
+      retries: $HEALTH_RETRIES
+      #start_period: $HEALTH_PERIOD
     
   #pinguin.dinus.ac.id Applications
   pinguin_apps:
@@ -44,33 +50,52 @@ services:
       - ${VOLUME_ISO}:/home/DATA/iso
     networks:
       - doscom
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: $HEALTH_INTERVAL
+      timeout: $HEALTH_TIMEOUT
+      retries: $HEALTH_RETRIES
+      #start_period: $HEALTH_PERIOD
 
   #Portainer dashboard Applications
   dashboard_apps:
-  restart: always
-    context: ./
-      dockerfile: dashboard_apps.dockerfile
+    restart: always
+    image: portainer/portainer:latest
     container_name: dashboard_apps
     volumes:
       - ${VOLUME_DOSCOM}:/data portainer/portainer
-      - ${VOLUME_DASHBOARD_SOCKET}:/var/run/docker.sock
+      - ${DOCKER_SOCKET}:/var/run/docker.sock
     networks:
       - doscom
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: $HEALTH_INTERVAL
+      timeout: $HEALTH_TIMEOUT
+      retries: $HEALTH_RETRIES
+      #start_period: $HEALTH_PERIOD
 
   #Load Balancer
   pinguin_lb:
-  restart: always
+    restart: always
     context: ./
       dockerfile: pinguin_lb.dockerfile
     container_name: pinguin_lb
     volumes:
-      - ${VOLUME_LB}:
-      - ${CONF_LB}:
+      #- ${VOLUME_LB}:/var/www/html
+      - ${CONF_LB}:/etc/nginx/conf.d/default.conf
     links:
       - doscom_apps:doscom_apps
       - pinguin_apps:pinguin_apps
       - dashboard_apps:dashboard_apps
     #external_links:
       #- CONTAINER:ALIAS
+    #depends_on:
+      #- SERVICE
     networks:
       - doscom
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: $HEALTH_INTERVAL
+      timeout: $HEALTH_TIMEOUT
+      retries: $HEALTH_RETRIES
+      #start_period: $HEALTH_PERIOD
