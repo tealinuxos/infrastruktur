@@ -25,7 +25,8 @@ services:
   #doscom.org Applications
   doscom_apps:
     restart: always
-    context: ./
+    build:
+      context: ./
       dockerfile: doscom_apps.dockerfile
     container_name: doscom_apps
     volumes:
@@ -42,7 +43,8 @@ services:
   #pinguin.dinus.ac.id Applications
   pinguin_apps:
     restart: always
-    context: ./
+    build:
+      context: ./
       dockerfile: pinguin_apps.dockerfile
     container_name: pinguin_apps
     volumes:
@@ -77,7 +79,8 @@ services:
   #Load Balancer
   pinguin_lb:
     restart: always
-    context: ./
+    build:
+      context: ./
       dockerfile: pinguin_lb.dockerfile
     container_name: pinguin_lb
     volumes:
