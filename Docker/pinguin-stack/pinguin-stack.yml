@@ -62,6 +62,7 @@ services:
   #Portainer dashboard Applications
   dashboard_apps:
     restart: always
+    privileged: true
     image: portainer/portainer:latest
     container_name: dashboard_apps
     volumes:
