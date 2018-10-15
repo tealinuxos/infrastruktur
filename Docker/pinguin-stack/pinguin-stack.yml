@@ -34,7 +34,8 @@ services:
     networks:
       - doscom
     healthcheck:
-      test: curl --fail http://localhost/ || exit 1
+      #test: curl --fail http://localhost/ || exit 1
+      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
       interval: $HEALTH_INTERVAL
       timeout: $HEALTH_TIMEOUT
       retries: $HEALTH_RETRIES
@@ -53,7 +54,8 @@ services:
     networks:
       - doscom
     healthcheck:
-      test: curl --fail http://localhost/ || exit 1
+      #test: curl --fail http://localhost/ || exit 1
+      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
       interval: $HEALTH_INTERVAL
       timeout: $HEALTH_TIMEOUT
       retries: $HEALTH_RETRIES
@@ -71,7 +73,8 @@ services:
     networks:
       - doscom
     healthcheck:
-      test: curl --fail http://localhost/ || exit 1
+      #test: curl --fail http://localhost/ || exit 1
+      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
       interval: $HEALTH_INTERVAL
       timeout: $HEALTH_TIMEOUT
       retries: $HEALTH_RETRIES
@@ -100,7 +103,8 @@ services:
     ports:
       - "80:80"
     healthcheck:
-      test: curl --fail http://localhost/ || exit 1
+      #test: curl --fail http://localhost/ || exit 1
+      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
       interval: $HEALTH_INTERVAL
       timeout: $HEALTH_TIMEOUT
       retries: $HEALTH_RETRIES
