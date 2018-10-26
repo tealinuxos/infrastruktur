@@ -21,8 +21,69 @@ networks:
     external:
       name: ${NETWORK_DOCKER}
 
+volumes:
+  mariadb_data:
+    driver: local
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+  postgres_data:
+    driver: local
+
 services:
   #Struktural DB
-  mariadb:
+  mariadb_dbms:
+    restart: always
+    image: mariadb:5.5
+    container_name: mariadb_pinguin
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - doscom
+    environment:
+      - MYSQL_ROOT_PASSWORD: example
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: ${HEALTH_INTERVAL}
+      timeout: ${HEALTH_TIMEOUT}
+      retries: ${HEALTH_RETRIES}
+      #start_period: ${HEALTH_PERIOD}
+
   #Non Struktural DB
-  mongodb:
+  mongodb_dbms:
+    restart: always
+    image: mongo:3.6
+    container_name: mongodb_pinguin
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    networks:
+      - doscom
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME: root
+      - MONGO_INITDB_ROOT_PASSWORD: example
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: ${HEALTH_INTERVAL}
+      timeout: ${HEALTH_TIMEOUT}
+      retries: ${HEALTH_RETRIES}
+      #start_period: ${HEALTH_PERIOD}
+  
+  #Postgres
+  postres_dbms:
+    restart: always
+    image: postgres:9.5
+    container_name: postgres_pinguin
+    volumes: 
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      -doscom
+    environment:
+      - POSTGRES_PASSWORD: example
+    healthcheck:
+      test: curl --fail http://localhost/ || exit 1
+      interval: ${HEALTH_INTERVAL}
+      timeout: ${HEALTH_TIMEOUT}
+      retries: ${HEALTH_RETRIES}
+      #start_period: ${HEALTH_PERIOD}  
