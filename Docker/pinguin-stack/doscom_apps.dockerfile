@@ -2,6 +2,6 @@ FROM httpd:latest
 
 LABEL maintenance="DOSCOM Team" \
     version="0.5" \
-    description="blablabla"
+    description="Doscom Web"
 
-HEALTHCHECK CMD curl --fail http://localhost/ || exit 1
+# HEALTHCHECK CMD curl --fail http://localhost/ || exit 1
