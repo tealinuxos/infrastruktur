@@ -4,7 +4,8 @@ LABEL maintenance="DOSCOM Team" \
     version="0.5" \
     description="Pinguin web"
 
-RUN apt update
-RUN apt install curl -y
+RUN apt-get update && \
+	apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
 
 # HEALTHCHECK CMD curl --fail http://localhost/ || exit 1
