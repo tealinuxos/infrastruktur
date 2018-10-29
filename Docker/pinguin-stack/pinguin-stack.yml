@@ -65,22 +65,13 @@ services:
   dashboard_apps:
     restart: always
     privileged: true
-    build:
-      context: ./
-      dockerfile: dashboard_apps.dockerfile
+    image: portainer/portainer
     container_name: dashboard_apps
     volumes:
       - ${VOLUME_DASHBOARD}:/data portainer/portainer
       - ${DOCKER_SOCKET}:/var/run/docker.sock
     networks:
       - doscom
-    healthcheck:
-      #test: curl --fail http://localhost/ || exit 1
-      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
-      interval: ${HEALTH_INTERVAL}
-      timeout: ${HEALTH_TIMEOUT}
-      retries: ${HEALTH_RETRIES}
-      #start_period: ${HEALTH_PERIOD}
 
   #Load Balancer
   pinguin_lb:
