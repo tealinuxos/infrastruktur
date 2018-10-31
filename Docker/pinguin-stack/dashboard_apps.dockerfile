@@ -1,4 +1,4 @@
-FROM httpd:latest
+FROM portainer/portainer:latest
 
 LABEL maintenance="DOSCOM Team" \
     version="0.5" \

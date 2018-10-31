@@ -34,11 +34,12 @@ services:
     networks:
       - doscom
     healthcheck:
-      test: curl --fail http://localhost/ || exit 1
-      interval: $HEALTH_INTERVAL
-      timeout: $HEALTH_TIMEOUT
-      retries: $HEALTH_RETRIES
-      #start_period: $HEALTH_PERIOD
+      #test: curl --fail http://localhost/ || exit 1
+      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
+      interval: ${HEALTH_INTERVAL}
+      timeout: ${HEALTH_TIMEOUT}
+      retries: ${HEALTH_RETRIES}
+      #start_period: ${HEALTH_PERIOD}
     
   #pinguin.dinus.ac.id Applications
   pinguin_apps:
@@ -53,28 +54,24 @@ services:
     networks:
       - doscom
     healthcheck:
-      test: curl --fail http://localhost/ || exit 1
-      interval: $HEALTH_INTERVAL
-      timeout: $HEALTH_TIMEOUT
-      retries: $HEALTH_RETRIES
-      #start_period: $HEALTH_PERIOD
+      #test: curl --fail http://localhost/ || exit 1
+      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
+      interval: ${HEALTH_INTERVAL}
+      timeout: ${HEALTH_TIMEOUT}
+      retries: ${HEALTH_RETRIES}
+      #start_period: ${HEALTH_PERIOD}
 
   #Portainer dashboard Applications
   dashboard_apps:
     restart: always
-    image: portainer/portainer:latest
+    privileged: true
+    image: portainer/portainer
     container_name: dashboard_apps
     volumes:
-      - ${VOLUME_DOSCOM}:/data portainer/portainer
+      - ${VOLUME_DASHBOARD}:/data portainer/portainer
       - ${DOCKER_SOCKET}:/var/run/docker.sock
     networks:
       - doscom
-    healthcheck:
-      test: curl --fail http://localhost/ || exit 1
-      interval: $HEALTH_INTERVAL
-      timeout: $HEALTH_TIMEOUT
-      retries: $HEALTH_RETRIES
-      #start_period: $HEALTH_PERIOD
 
   #Load Balancer
   pinguin_lb:
@@ -90,17 +87,19 @@ services:
       - doscom_apps:doscom_apps
       - pinguin_apps:pinguin_apps
       - dashboard_apps:dashboard_apps
-    #external_links:
-      #- CONTAINER:ALIAS
+    external_links:
+      - mariadb_pinguin:mariadb_pinguin
+      - mongodb_pinguin:mongodb_pinguin
     #depends_on:
       #- SERVICE
     networks:
       - doscom
     ports:
-      - "80:80"
+      - 80:80
     healthcheck:
-      test: curl --fail http://localhost/ || exit 1
-      interval: $HEALTH_INTERVAL
-      timeout: $HEALTH_TIMEOUT
-      retries: $HEALTH_RETRIES
-      #start_period: $HEALTH_PERIOD
+      #test: curl --fail http://localhost/ || exit 1
+      test: curl -f -s -o /dev/null -w "%{http_code}\n" http://localhost/ || exit1
+      interval: ${HEALTH_INTERVAL}
+      timeout: ${HEALTH_TIMEOUT}
+      retries: ${HEALTH_RETRIES}
+      #start_period: ${HEALTH_PERIOD}
