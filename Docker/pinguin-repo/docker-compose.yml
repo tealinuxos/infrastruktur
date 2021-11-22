@@ -1,0 +1,44 @@
+version: '3'
+networks:
+  proxy:
+    external:
+      name: proxy
+services:
+  web-repo:
+    container_name: pinguin-repo
+    #build: .
+    image: yusufsanjaya24/alpine-caddy:latest
+    expose:
+     - "80"
+    volumes:
+     - ./config/Caddyfile:/etc/caddy/Caddyfile
+     - /home/data-doscom/iso:/usr/share/caddy
+    restart: always
+    networks:
+     - proxy
+    labels:
+     # The labels are usefull for Traefik only
+     - "traefik.enable=true"
+     - "traefik.docker.network=proxy"
+     # Get the routes from http
+     - "traefik.http.routers.web-repo.rule=Host(`repo.doscom.org`)"
+     - "traefik.http.routers.web-repo.entrypoints=web"
+     #- "traefik.http.middlewares.web-repo-strip.stripprefix.prefixes=/iso"
+     #- "traefik.http.routers.web-repo.middlerwares=web-repo-strip@docker"
+     #- "traefik.http.routers.web-repo.service=web-repo"
+     #- "traefik.http.services.web-repo.loadbalancer.server.port=80"
+     # Redirect these routes to https
+     #- "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+     #- "traefik.http.routers.wordpress.middlewares=redirect-to-https"
+     # Get the routes from https
+     #- "traefik.http.middlewares.web-repo-secured.headers.customresponseheaders.Access-Control-Allow-Methods=POST, GET, PUT, OPTIONS, DELETE"
+     - "traefik.http.middlewares.web-repo-secured.headers.accesscontrolalloworiginlist=*"
+     - "traefik.http.middlewares.web-repo-secured.headers.accesscontrolallowmethods=GET,OPTIONS,PUT,POST,DELETE"
+     - "traefik.http.middlewares.web-repo-secured.headers.accesscontrolallowheaders=Authorization,Origin,Content-Type,Accept"
+     #attach middleware to the frontend router
+     #- "traefik.http.routers.web-repo-secured.middlewares=websecure"
+     - "traefik.http.routers.web-repo-secured.rule=Host(`pinguin.dinus.ac.id`) && Path(`/iso`)"
+     - "traefik.http.routers.web-repo-secured.entrypoints=websecure"
+     # Apply autentificiation with http challenge
+     - "traefik.http.routers.web-repo-secured.tls=true"
+     - "traefik.http.routers.web-repo-secured.tls.certresolver=letsencryptresolver"
